@@ -1,0 +1,16 @@
+# Root-level ignores
+node_modules/
+dist/
+build/
+.env
+*.log
+
+# Client
+/client/node_modules/
+/client/dist/
+/client/.env
+
+# Server
+/server/node_modules/
+/server/build/
+/server/.env
