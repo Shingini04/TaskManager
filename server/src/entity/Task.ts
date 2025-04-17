@@ -1,9 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { ObjectType, Field, ID } from 'type-graphql';
 
-
-// entity/Task.ts
-
 @ObjectType()
 @Entity()
 export class Task {

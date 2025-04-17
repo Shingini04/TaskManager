@@ -16,11 +16,7 @@ const config: ConnectionOptions = {
   entities: [Task],
   migrations: ['src/migration/**/*.ts'],
   subscribers: ['src/subscriber/**/*.ts'],
-  cli: {
-    entitiesDir: 'src/entity',
-    migrationsDir: 'src/migration',
-    subscribersDir: 'src/subscriber',
-  },
 };
 
 export default config;
+

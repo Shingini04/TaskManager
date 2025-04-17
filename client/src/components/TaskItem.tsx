@@ -9,6 +9,12 @@ interface TaskItemProps {
 }
 
 const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
+  const [isEditing, setIsEditing] = React.useState(false);
+  const [formData, setFormData] = React.useState({
+    title: task.title,
+    description: task.description || '',
+  });
+
   const [updateTask] = useMutation(UPDATE_TASK);
   const [deleteTask] = useMutation(DELETE_TASK, {
     refetchQueries: [
@@ -52,7 +58,6 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
 
   const formatDueDate = () => {
     if (!task.dueDate) return null;
-
     const date = new Date(task.dueDate);
     return new Intl.DateTimeFormat('en-US', {
       month: 'short',
@@ -75,13 +80,31 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
     } hover:shadow-lg`}>
       <div className="flex justify-between items-start mb-3">
         <div className="flex-1">
-          <h3 className={`text-lg font-medium ${task.completed ? 'line-through text-blue-400' : 'text-blue-700'}`}>
-            {task.title}
-          </h3>
-          {task.description && (
-            <p className={`text-sm mt-1 ${task.completed ? 'text-gray-400' : 'text-gray-600'}`}>
-              {task.description}
-            </p>
+          {isEditing ? (
+            <>
+              <input
+                type="text"
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                className="w-full text-lg font-medium mb-2 border border-gray-300 p-2 rounded"
+              />
+              <textarea
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                className="w-full text-sm border border-gray-300 p-2 rounded"
+              />
+            </>
+          ) : (
+            <>
+              <h3 className={`text-lg font-medium ${task.completed ? 'line-through text-blue-400' : 'text-blue-700'}`}>
+                {task.title}
+              </h3>
+              {task.description && (
+                <p className={`text-sm mt-1 ${task.completed ? 'text-gray-400' : 'text-gray-600'}`}>
+                  {task.description}
+                </p>
+              )}
+            </>
           )}
         </div>
 
@@ -96,9 +119,9 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
         <div className="flex items-center">
           <span className={`flex items-center ${task.completed ? 'text-blue-400' : isOverdue() ? 'text-red-500' : 'text-gray-500'}`}>
             <>
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
               {formatDueDate()}
               {isOverdue() && !task.completed && (
                 <span className="ml-1 text-red-500 text-xs font-medium">(Overdue)</span>
@@ -127,6 +150,13 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
         </button>
 
         <button
+          onClick={() => setIsEditing(true)}
+          className="px-3 py-2 text-sm rounded-md bg-yellow-100 hover:bg-yellow-200 text-yellow-800 border border-yellow-300 font-medium transition-all"
+        >
+          Edit
+        </button>
+
+        <button
           onClick={handleDelete}
           className="px-3 py-2 text-sm rounded-md bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 font-medium transition-all"
         >
@@ -135,6 +165,43 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
           </svg>
         </button>
       </div>
+
+      {isEditing && (
+        <div className="flex gap-2 mt-3">
+          <button
+            onClick={() => {
+              updateTask({
+                variables: {
+                  data: {
+                    id: task.id,
+                    title: formData.title,
+                    description: formData.description,
+                  },
+                },
+                refetchQueries: [
+                  { query: GET_TASKS },
+                  { query: GET_TASKS_BY_STATUS, variables: { completed: true } },
+                  { query: GET_TASKS_BY_STATUS, variables: { completed: false } },
+                ],
+              });
+              setIsEditing(false);
+            }}
+            className="px-3 py-2 text-sm rounded-md bg-green-100 hover:bg-green-200 text-green-700 border border-green-300 font-medium transition-all"
+          >
+            Save
+          </button>
+
+          <button
+            onClick={() => {
+              setFormData({ title: task.title, description: task.description || '' });
+              setIsEditing(false);
+            }}
+            className="px-3 py-2 text-sm rounded-md bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-300 font-medium transition-all"
+          >
+            Cancel
+          </button>
+        </div>
+      )}
     </div>
   );
 };
