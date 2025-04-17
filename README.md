@@ -14,9 +14,12 @@ cd ToDoFullStack
 ### 2. Create a `.env` file
 In the root folder, create a `.env` file and add your credentials:
 ```bash
-DB_USERNAME=your_username_here
-DB_PASSWORD=your_password_here
-API_KEY=your_api_key_here
+PORT=4000
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=your username
+DB_PASSWORD=your password
+DB_DATABASE=taskmanagement
 ```
 
 ### 3. Start the app
