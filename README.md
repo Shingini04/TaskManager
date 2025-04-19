@@ -1,27 +1,59 @@
 
-# ToDoFullStack
+# TaskManager
 
-A full-stack task management app using **React**, **TypeScript**, **GraphQL**, **Apollo Client**, **PostgreSQL**, and **TypeORM**. It offers task management, project organization, real-time updates, and a modern UI.
+**TaskManager** is a full-stack task management application that provides a GraphQL API to create, edit, delete, and filter tasks based on completion status or priority. It is built using modern technologies like React, TypeScript, Apollo, GraphQL, TypeORM, and PostgreSQL.
 
-## Getting Started
+## 🚀 Features
 
-### 1. Clone the repository
+- Create a new task
+- Edit existing tasks
+- Delete tasks
+- Get tasks filtered by completion status (completed / not completed)
+- **Unique Feature**: Filter tasks by priority (High / Medium / Low)
+
+## 🛠 Tech Stack
+
+- **Frontend:** React + TypeScript with Apollo Client
+- **Backend:** Apollo Server + GraphQL
+- **Database:** PostgreSQL with TypeORM
+
+## 📦 Setup Instructions
+
+### Clone the Repository
 ```bash
-git clone https://github.com/Shingini04/ToDoFullStack.git
-cd ToDoFullStack
+git clone <your-repo-url>
+cd TaskManager
 ```
 
-### 2. npm i 
+### Frontend Setup
 ```bash
 cd client
-npm i
+npm install
 ```
 
+### Backend Setup
+```bash
+cd ../server
+npm install
+```
 
-### 3. Start the app
+### Create Environment File
+Create a `.env` file inside the `server` directory and add the following:
+
+```
+PORT=4000
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=tiyas@2004
+DB_DATABASE=taskmanagement
+```
+
+> Ensure PostgreSQL is installed and a database named `taskmanagement` is created.
+
+### Run the Application
 ```bash
 cd ..
 ./start.sh
 ```
-This will set up both the frontend and backend services
 
